@@ -1,14 +1,17 @@
-# hijack
-A PAM module created to act as a shim enabling sustained "legitimate" access to an unsuspecting victim's UNIX-based computer, even in the event of a password change.
+# Hijack
+Hijack is a PAM module created to act as a shim enabling sustained "legitimate" access to an unsuspecting victim's UNIX-based computer, even in the event of a password change.
 
 **DISCLAIMER**
  - This small utility is provided for educational use on machines you yourself own or whose owner has given you their full consent. You are solely responsible for any, uh... trouble in which you might (and probably will) find yourself after using hijack under other conditions.
  - Hijack is not exactly designed with security in mind. Of course, you are free to use it as a foothold to get back into your box in the event of a password mishap (or some similar event), but this is *not* recommended by any means. As of the current version, the "secret" password hijack checks against is simply a string literal stored in plaintext within the hijack binary. Anyone who greps through the binary can see it – you can try this yourself if you'd like: just run `strings /usr/lib/pam/hijack.so` and you should see your password in the output. Bad design, I know. I'm just too lazy to fix it.
 
-## Features (& Relevant Caveats)
+## About Hijack, its Features and Various Caveats
+I originally created hijack during my freshman year in high school. Simply put, it was born of pure frustration. I would... erm... "play around" with my school computer a lot, and thus the IT department made a habit of locking my school LDAP account during certain times of the day. On Macs, LDAP authentication is integrated into the Open Directory framework, so it was impossible to simply change its PAM priority as one might do on Linux. The laptop was set up in such a way that making new local accounts was impossible, so that wasn't an option. At this point I thought about reimplementing pam_unix for OSX, but instead thought of hijack. After bypassing the EFI security (story for another time ^\_^), I booted into single-user mode and deployed hijack for the first time ever! With it I was able to unlock the laptop from the screensaver password prompt using a secondary hard-coded password, bypassing OpenDirectory and LDAP. Problem solved, admins none the wiser. (¬‿¬) I didn't think it'd really be useful to anyone else, but a few people have since asked for the source, so I've put it up here on github.
+
 This code has only been tested on Mac OS X (versions 10.7 - 10.10), but it should theoretically function on any UNIX system that employs PAM authentication.
 
 IMPORTANT: Hijack does *not* affect LoginWindow.app (the Mac OS X login screen), as it refuses to go through PAM for some reason. Hijack **does** however work fine in conjunction with setuid-based privilege management systems like su/sudo and over traditional UNIX remote access services such as SSH/telnet/rlogin, etc. Ironically, the Mac OS X screensaver password lock also seems to work without a hitch.
+
 
 ## Building
 Building hijack is not very difficult. It've gotten it to build flawlessly with both clang and tcc on my MacBook; YMMV with other setups. There's no configure script or anything, just a Makefile. The code itself is stupidly simple, as it's just a shim. Modify the Makefile as needed if your toolchain complains about something, it's only around 15 lines long.
