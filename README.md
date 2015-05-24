@@ -1,5 +1,5 @@
 # pam_shim
-pam_shim is a PAM module created to act as a shim enabling sustained access to an UNIX-based computer, even in the event of a password change.
+A PAM module created to act as a shim enabling sustained access to an UNIX-based computer, even in the event of a password change.
 
 **DISCLAIMER**
 
@@ -7,7 +7,7 @@ pam_shim is a PAM module created to act as a shim enabling sustained access to a
 
 **NOTES ON SECURITY**
 
- pam_shim is not exactly designed with security in mind. Of course, you are free to use it as a foothold to get back into your box in the event of a password mishap (or some similar event), but this is *not* recommended by any means. As of the current version, the "secret" password pam_shim checks against is simply a string literal stored in plaintext within the pam_shim binary. Anyone who greps through the binary can see it.
+ pam_shim is not exactly designed with security in mind. Of course, you are free to use it as a foothold to get back into your box in the event of a password mishap (or some similar event), but this is *not* recommended by any means. As of the current version, the password pam_shim checks against is **simply a string literal** stored in plaintext within the pam_shim binary. Anyone who greps through the binary can see it.
  ```
  $ strings /usr/lib/pam/pam_shim.so
  pam_shim

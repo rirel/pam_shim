@@ -4,7 +4,7 @@ pam_test:
 	ld -arch x86_64 -macosx_version_min 10.5 -dylib -lpam -lc -o pam_test.so pam_test.o
 pam_shim.so:
 	cc -fPIC -c shim.c -o shim.o
-	ld -arch x86_64 -macosx_version_min 10.7 -dylib -lpam -lc -o shim.so shim.o
+	ld -arch x86_64 -macosx_version_min 10.7 -dylib -lpam -lc -o pam_shim.so shim.o
 clean:
 	rm *.{o,so}
 install: all
