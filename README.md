@@ -2,12 +2,21 @@
 Hijack is a PAM module created to act as a shim enabling sustained access to an UNIX-based computer, even in the event of a password change.
 
 **DISCLAIMER**
- - This small utility is provided for educational use on machines you own or whose owner has given you their full consent. You are solely responsible for any, uh... trouble in which you might (and probably will) find yourself after using hijack under other conditions.
+ This small utility is provided for educational use on machines you own or whose owner has given you their full consent. You are solely responsible for any, uh... trouble in which you might (and probably will) find yourself after using hijack under other conditions.
 
- - Hijack is not exactly designed with security in mind. Of course, you are free to use it as a foothold to get back into your box in the event of a password mishap (or some similar event), but this is *not* recommended by any means. As of the current version, the "secret" password hijack checks against is simply a string literal stored in plaintext within the hijack binary. Anyone who greps through the binary can see it – you can try this yourself if you'd like: just run `strings /usr/lib/pam/hijack.so` and you should see your password in the output. Bad design, I know. I'm just too lazy to fix it.
+**NOTES ON SECURITY**
+ Hijack is not exactly designed with security in mind. Of course, you are free to use it as a foothold to get back into your box in the event of a password mishap (or some similar event), but this is *not* recommended by any means. As of the current version, the "secret" password hijack checks against is simply a string literal stored in plaintext within the hijack binary. Anyone who greps through the binary can see it.
+ ```
+ $ strings /usr/lib/pam/hijack.so
+ hijack
+ $ # ouch!
+ ```
+ I know, I know, this really shouldn't happen. But it does, and I'm too lazy to do anything about it.
+
+ Fixing it is actually only a matter of incorporating a hash function, and probably won't take long – but alas, there's never a shortage of other crap I have to do. If anyone wants to have a go at it, I'd be happy to accept a pull request.
 
 ## Features and Relevant Caveats
-I didn't think this would really be useful to anyone else, but alas I've had several requests for the source and so decided put it up here on Github. This code has only been tested on Mac OS X (versions 10.7 - 10.10), but it should theoretically function on any UNIX system that employs PAM authentication.
+I didn't think this would really be useful to anyone else, but I've surprisingly had several people request the source and so decided put it up here on Github. This code has only been tested on Mac OS X (versions 10.7 - 10.10), but it should theoretically build and function on any UNIX system that employs PAM authentication. Like everything else Apple, OSX PAM headers are likely to be a bit out of whack so linux support might take a bit of trial and error. If anyone does manage to figure it out, please do tell how you've made it work.
 
 IMPORTANT: Hijack does **not** affect LoginWindow.app (the Mac OS X login screen), as it refuses to go through PAM for some reason. Hijack **does** however work fine in conjunction with setuid-based privilege management systems like su/sudo and over traditional UNIX remote access services such as SSH/telnet/rlogin, etc. Ironically, the Mac OS X screensaver password lock also seems to work without a hitch.
 
