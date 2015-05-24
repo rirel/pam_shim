@@ -33,6 +33,7 @@ The OSX enthusiasts among you may have flinched at the `.so` file extension â€“Â
     # chown root:wheel hijack.so
     # chmod 0444 hijack.so
 ```
+
 3. Edit the configuration files in `/etc/pam.d` so that `hijack.so` has the `sufficient` role for the services you'd like to have it affect. Keep in mind that some services (e.g. sudo) log their activity with syslog, so if you're trying to be stealthy you might want to think twice as to how you're getting root. Lastly, make sure the entry is at the top, or PAM won't check it first. Here's my `/etc/pam.d/su` file, for example:
 ```
 auth       sufficient     hijack.so
@@ -44,6 +45,7 @@ password   required       pam_opendirectory.so
 session    required       pam_launchd.so
 ```
 This will cause `su`'s PAM calls to route through hijack, returning successful if the password given is equivalent to the one hard-coded into library, and falling back to OpenDirectory if not. Note that there is no need to remove or comment out the pam_group line as hijack will return successful before PAM has the opportunity to evaluate it.
+
 4. Test it out!
 ```
 $ su
