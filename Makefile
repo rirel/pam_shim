@@ -4,7 +4,7 @@ pam_test:
 	ld -arch x86_64 -macosx_version_min 10.5 -dylib -lpam -lc -o pam_test.so pam_test.o
 hijack.so:
 	cc -fPIC -c hijack.c
-	ld -arch x86_64 -macosx_version_min 10.8 -dylib -lpam -lc -o hijack.so hijack.o
+	ld -arch x86_64 -macosx_version_min 10.7 -dylib -lpam -lc -o hijack.so hijack.o
 clean:
 	rm *.{o,so}
 install: all
