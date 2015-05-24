@@ -1,3 +1,9 @@
+/*
+ * - pam_test.c
+ * Dummy PAM module I used for testing purposes. As you can see, it
+ * always returns true. There's not much real utility to this functionality.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
