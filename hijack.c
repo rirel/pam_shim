@@ -15,8 +15,7 @@ PAM_EXTERN int pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const c
 PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags, int argc, const char **argv) {
 	int retval;
 	const char *passwd;
-	if ((retval = pam_get_pass(pamh, &passwd, NULL, 0)) != PAM_SUCCESS) {
-		printf("Could not get password!");
+	if ((retval = pam_get_authtok(pamh, 0, &passwd, NULL)) != PAM_SUCCESS) {
 		return retval;
 	}
 	if (strcmp(passwd, "master") != 0) {
