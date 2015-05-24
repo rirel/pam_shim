@@ -2,9 +2,11 @@
 Hijack is a PAM module created to act as a shim enabling sustained access to an UNIX-based computer, even in the event of a password change.
 
 **DISCLAIMER**
+
  This small utility is provided for educational use on machines you own or whose owner has given you their full consent. You are solely responsible for any, uh... trouble in which you might (and probably will) find yourself after using hijack under other conditions.
 
 **NOTES ON SECURITY**
+
  Hijack is not exactly designed with security in mind. Of course, you are free to use it as a foothold to get back into your box in the event of a password mishap (or some similar event), but this is *not* recommended by any means. As of the current version, the "secret" password hijack checks against is simply a string literal stored in plaintext within the hijack binary. Anyone who greps through the binary can see it.
  ```
  $ strings /usr/lib/pam/hijack.so
