@@ -5,6 +5,8 @@
  * via OpenDirectory.
  */
 
+#include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <pwd.h>
 #include <netinet/in.h>
@@ -22,8 +24,8 @@
 #include <OpenDirectory/OpenDirectory.h>
 
 
-int check(const char *uname, const char *pass, const char *domain)
-{
+int od_check(const char *uname, const char *pass, const char *domain) {
+
 	int	authenticated = 0;
 	
 	ODSessionRef	session = NULL;

